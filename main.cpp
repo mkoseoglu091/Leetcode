@@ -1,11 +1,43 @@
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <vector>
 
 using namespace std;
 
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
 class Solution {
    public:
+    /**
+     * 21. Merge Two Sorted Lists
+     * Given two sorted linked lists, returns a single merged linked list
+     */
+    static ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
+        // if list 1 or 2 is null, return the other list
+        if (list1 == NULL) {
+            return list2;
+        }
+        if (list2 == NULL) {
+            return list1;
+        }
+
+        // recursively add the merger of rest of the elements to the smallest head
+        if (list1->val <= list2->val) {
+            list1->next = mergeTwoLists(list1->next, list2);
+            return list1;
+        } else {
+            list2->next = mergeTwoLists(list1, list2->next);
+            return list2;
+        }
+    }
+
     /**
      * 205. Isomorphic Strings
      * Given strings s and t, determine if they are isomorphic
@@ -17,7 +49,7 @@ class Solution {
         // loop through every char, if not in dictionary add to dictionary, while adding if val already exists return false
         for (size_t i{0}; i < s.length(); i++) {
             if (dictionary.find(s[i]) == dictionary.end()) {
-                if (count(added.begin(), added.end(), t[i])) {
+                if (count(added.begin(), added.end(), t[i])) {  // count requires <algorithm> to be included
                     return false;
                 }
                 dictionary[s[i]] = t[i];
@@ -29,6 +61,33 @@ class Solution {
             }
         }
         return true;
+    }
+
+    /**
+     * 206. Reverse Linked List
+     * Given a linked list, returns the reversed linked list
+     * I solved this recursively and iteratively
+     */
+    static ListNode *reverseList(ListNode *head) {
+        /* Recursive
+        if(head==NULL || head->next == NULL){
+            return head;
+        }
+        ListNode* rest = reverseList(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return rest;
+        */
+
+        ListNode *prevNode = nullptr;
+        auto curNode = head;
+        while (curNode) {
+            auto nextNode = curNode->next;
+            curNode->next = prevNode;
+            prevNode = curNode;
+            curNode = nextNode;
+        }
+        return prevNode;
     }
 
     /**
@@ -122,12 +181,55 @@ class Solution {
 };
 
 int main() {
+    // Test for 21
+    /*
+    ListNode listElement = ListNode(5);
+    ListNode list1 = ListNode(1, &listElement);  // [1, 5]
+    ListNode list2 = ListNode(3);                // [3]
+    ListNode merge = *Solution::mergeTwoLists(&list1, &list2);
+    while (merge.val) {
+        cout << merge.val << ", ";
+        merge = *merge.next;
+    }
+    */
+    /*********************************************************/
+
+    // Test for 205
+    /*
+    string s = "paper";
+    string t = "title";
+    cout << Solution::isIsomorphic(s, t);
+    */
+    /*********************************************************/
+
+    // Test for 206
+    /*
+    ListNode last = ListNode(5);
+    ListNode middle = ListNode(3, &last);
+    ListNode first = ListNode(1, &middle);  // [1, 3, 5]
+    ListNode reversed = *Solution::reverseList(&first);
+    while (reversed.val) {
+        cout << reversed.val << " ,";
+        reversed = *reversed.next;
+    }
+    */
+    /*********************************************************/
+
+    // Test for 392
+    /*
+    string s = "abc";
+    string t = "ahbgdc";
+    cout << Solution::isSubsequence(s, t);
+    */
+    /*********************************************************/
+
     // Test for 724
     /*
     vector<int> v{1, 7, 3, 6, 5, 6};
     int pivot = Solution::pivotIndex(v);
     cout << pivot << endl;
     */
+    /*********************************************************/
 
     // Test for 1480
     /*
@@ -139,6 +241,7 @@ int main() {
     }
     cout << endl;
     */
+    /*********************************************************/
 
     return 0;
 }
