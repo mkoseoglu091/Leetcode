@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Helper Node struct used in problems with linked lists provided by leetcode
 struct ListNode {
     int val;
     ListNode *next;
@@ -36,6 +37,29 @@ class Solution {
             list2->next = mergeTwoLists(list1, list2->next);
             return list2;
         }
+    }
+
+    /**
+     * 142. Linked List Cycle II
+     * Given head of a linked list, return the node where a
+     * cycle begins, if no cycle exists in the list return null
+     */
+    static ListNode *detectCycle(ListNode *head) {
+        vector<ListNode *> v;
+        if (head == NULL) {
+            return NULL;
+        }
+        while (head->next != NULL) {
+            if (count(v.begin(), v.end(), head)) {
+                break;
+            }
+            v.push_back(head);
+            head = head->next;
+        }
+        if (head->next == NULL) {
+            return NULL;
+        }
+        return head;
     }
 
     /**
@@ -161,6 +185,20 @@ class Solution {
     }
 
     /**
+     * 876. Middle of Linked List
+     * Given head of singly linked list returns the middle Node
+     */
+    static ListNode *middleNode(ListNode *head) {
+        ListNode *slow = head;
+        ListNode *fast = head;
+        while (fast != NULL && fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+
+    /**
      * 1480. Running Sum of 1d Array
      * Accepts an integer vector as input, calculates the running sum
      * for each element and returns it as an integer vector
@@ -191,6 +229,20 @@ int main() {
         cout << merge.val << ", ";
         merge = *merge.next;
     }
+    */
+    /*********************************************************/
+
+    // Test for 142
+    /*
+    ListNode n5 = ListNode(5);
+    ListNode n4 = ListNode(4, &n5);
+    ListNode n3 = ListNode(3, &n4);
+    ListNode n2 = ListNode(2, &n3);
+    ListNode n1 = ListNode(1, &n2);  // [1,2,3,4,5] expected middle 3
+    n5.next = &n2;                   // after 5th node, the list loops back to 2nd node
+
+    ListNode m = *Solution::detectCycle(&n1);
+    cout << m.val;
     */
     /*********************************************************/
 
@@ -228,6 +280,19 @@ int main() {
     vector<int> v{1, 7, 3, 6, 5, 6};
     int pivot = Solution::pivotIndex(v);
     cout << pivot << endl;
+    */
+    /*********************************************************/
+
+    // Test for 876
+    /*
+    ListNode n5 = ListNode(5);
+    ListNode n4 = ListNode(4, &n5);
+    ListNode n3 = ListNode(3, &n4);
+    ListNode n2 = ListNode(2, &n3);
+    ListNode n1 = ListNode(1, &n2);  // [1,2,3,4,5] expected middle 3
+
+    ListNode m = *Solution::middleNode(&n1);
+    cout << m.val;
     */
     /*********************************************************/
 
