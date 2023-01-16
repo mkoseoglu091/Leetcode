@@ -40,6 +40,21 @@ class Solution {
     }
 
     /**
+     * 121. Best Time To Buy and Sell Stock
+     * Given a vector of integer prices, maximize profit by finding the best
+     * day to buy and a later day to sell, return the maximum profit
+     */
+    static int maxProfit(vector<int> &prices) {
+        int x = INT_MAX, y = 0;
+
+        for (auto p : prices) {
+            x = min(p, x);
+            y = max(y, p - x);
+        }
+        return y;
+    }
+
+    /**
      * 142. Linked List Cycle II
      * Given head of a linked list, return the node where a
      * cycle begins, if no cycle exists in the list return null
@@ -150,6 +165,29 @@ class Solution {
     }
 
     /**
+     * 409. Longest Palindrome
+     * Given a string s, which can consist of both upper and lower case characters, return longest possible palindrome
+     * Letters are case sensitive.
+     * Example: "abccccdd" can create the palindrome "dccaccd", so the output would be 7 (number of characters)
+     */
+    static int longestPalindrome(string s) {
+        map<char, int> map;
+        for (char x : s) {
+            map[x]++;
+        }
+        int length = 0;
+        int carry = 0;
+        for (auto x : map) {  // take all even numbered characters, for any odd, carry 1, take rest of the characters (for 3, carry 1 take 2, for 1 carry 1 take none etc.)
+            if (x.second % 2 == 1) {
+                carry = 1;
+                length += (x.second - 1);
+            } else
+                length += x.second;
+        }
+        return length + carry;
+    }
+
+    /**
      * 724. Find Pivot Index
      * Accepts an integer vector as input returns the index where
      * the sum of elements on the right of the pivot is equal to
@@ -232,6 +270,13 @@ int main() {
     */
     /*********************************************************/
 
+    // Test for 121
+    /*
+    vector<int> prices {7, 1, 5, 3, 6, 4};
+    cout << Solution::maxProfit(prices);
+    */
+    /*********************************************************/
+
     // Test for 142
     /*
     ListNode n5 = ListNode(5);
@@ -272,6 +317,13 @@ int main() {
     string s = "abc";
     string t = "ahbgdc";
     cout << Solution::isSubsequence(s, t);
+    */
+    /*********************************************************/
+
+    // Test for 409
+    /*
+    string s = "abccccdd";
+    cout << Solution::longestPalindrome(s);
     */
     /*********************************************************/
 
