@@ -1,11 +1,14 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <queue>
 #include <vector>
 
 using namespace std;
 
-// Helper Node struct used in problems with linked lists provided by leetcode
+// Helper structs and classes
+
+// Helper ListNode struct used in problems with linked lists provided by leetcode
 struct ListNode {
     int val;
     ListNode *next;
@@ -13,6 +16,36 @@ struct ListNode {
     ListNode(int x) : val(x), next(nullptr) {}
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
+
+// Helper Node struct used in N-ary tree
+class Node {
+   public:
+    int val;
+    vector<Node *> children;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+    }
+
+    Node(int _val, vector<Node *> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+
+// Helper TreeNode struct used in binary tree related questions
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+/*********************************************************/
 
 class Solution {
    public:
@@ -37,6 +70,30 @@ class Solution {
             list2->next = mergeTwoLists(list1, list2->next);
             return list2;
         }
+    }
+
+    /**
+     * 102. Binary Tree Level Order Traversal
+     * Given the root of a binary tree, return the level order
+     * traversal as a vector<vector<int>> with each level in a
+     * separate vector
+     */
+    static vector<vector<int>> levelOrder(TreeNode *root) {
+        if (!root) return {};
+        vector<vector<int>> res;
+        queue<TreeNode *> q{{root}};
+        while (!q.empty()) {
+            vector<int> oneLevel;
+            for (int i = q.size(); i > 0; --i) {
+                TreeNode *t = q.front();
+                q.pop();
+                oneLevel.push_back(t->val);
+                if (t->left) q.push(t->left);
+                if (t->right) q.push(t->right);
+            }
+            res.push_back(oneLevel);
+        }
+        return res;
     }
 
     /**
@@ -188,6 +245,23 @@ class Solution {
     }
 
     /**
+     * 589. N-ary Tree Preorder Traversal
+     * Given the root node of an n-ary tree, return preorder traversal of nodes
+     */
+    static void solve(Node *root, vector<int> &ans) {
+        if (root == NULL) return;
+        ans.push_back(root->val);
+        for (int i = 0; i < root->children.size(); i++) {
+            solve(root->children[i], ans);
+        }
+    }
+    static vector<int> preorder(Node *root) {
+        vector<int> ans;
+        solve(root, ans);
+        return ans;
+    }
+
+    /**
      * 724. Find Pivot Index
      * Accepts an integer vector as input returns the index where
      * the sum of elements on the right of the pivot is equal to
@@ -270,6 +344,31 @@ int main() {
     */
     /*********************************************************/
 
+    // Test for 102
+
+    TreeNode gl = TreeNode(15);
+    TreeNode gr = TreeNode(7);
+    TreeNode cl = TreeNode(9);
+    TreeNode cr = TreeNode(20, &gl, &gr);
+    TreeNode root = TreeNode(3, &cl, &cr);
+    vector<vector<int>> levelOrderVector = Solution::levelOrder(&root);
+    // input tree:
+    //      3
+    //   9     20
+    //       15   7
+
+    cout << "[";
+    for (auto v : levelOrderVector) {
+        cout << "[";
+        for (int i : v) {
+            cout << i << " ,";
+        }
+        cout << "]";
+    }
+    cout << "]" << endl;
+
+    /*********************************************************/
+
     // Test for 121
     /*
     vector<int> prices {7, 1, 5, 3, 6, 4};
@@ -324,6 +423,29 @@ int main() {
     /*
     string s = "abccccdd";
     cout << Solution::longestPalindrome(s);
+    */
+    /*********************************************************/
+
+    // Test for 589
+    /*
+    Node g1 = Node(5);
+    Node g2 = Node(6);
+    vector<Node *> grandchildren = {&g1, &g2};
+    Node c1 = Node(3, grandchildren);
+    Node c2 = Node(2);
+    Node c3 = Node(4);
+    vector<Node *> children = {&c1, &c2, &c3};
+    Node root = Node(1, children);
+    // input tree:
+    //      1
+    //  3   2   4
+    // 5 6
+
+    vector<int> preorderVector = Solution::preorder(&root);
+    for (int i : preorderVector) {
+        cout << i << ", ";
+    }
+    cout << endl;
     */
     /*********************************************************/
 
