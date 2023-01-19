@@ -76,6 +76,26 @@ class Solution {
     }
 
     /**
+     * 98. Validate Binary Search Tree
+     * Given the root of a binary tree determine if its a valid binary search tree
+     */
+    static void helper(TreeNode *root, vector<int> &ans) {  // inorder traversal
+        if (root == NULL) return;
+        helper(root->left, ans);
+        ans.push_back(root->val);
+        helper(root->right, ans);
+    }
+    static bool isValidBST(TreeNode *root) {
+        vector<int> ans;
+        helper(root, ans);  // populates ans with inorder traversal
+        // inorder traversal of binary search tree has to be in ascending order
+        for (int i = 0; i < ans.size() - 1; i++) {
+            if (ans[i] >= ans[i + 1]) return false;
+        }
+        return true;
+    }
+
+    /**
      * 102. Binary Tree Level Order Traversal
      * Given the root of a binary tree, return the level order
      * traversal as a vector<vector<int>> with each level in a
@@ -187,6 +207,23 @@ class Solution {
             curNode = nextNode;
         }
         return prevNode;
+    }
+
+    /**
+     * 235. Lowest Common Ancestor of a Binary Search Tree
+     * Given a binary search tree, find the lowest common ancestor of two nodes
+     */
+    static TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+        if (root == NULL) return NULL;
+        // if p and q are on opposing sides of the binary tree, lowest common ancestor has to be root
+        // otherwise we can treat left or right node  as the root and call the function recursively to find lowest common ancestor
+        if (p->val > root->val && q->val > root->val) {
+            return lowestCommonAncestor(root->right, p, q);
+        } else if (p->val < root->val && q->val < root->val) {
+            return lowestCommonAncestor(root->left, p, q);
+        } else {
+            return root;
+        }
     }
 
     /**
@@ -388,6 +425,22 @@ int main() {
     */
     /*********************************************************/
 
+    // Test for 98
+    /*
+    TreeNode gl = TreeNode(3);
+    TreeNode gr = TreeNode(6);
+    TreeNode cl = TreeNode(1);
+    TreeNode cr = TreeNode(4, &gl, &gr);
+    TreeNode root = TreeNode(5, &cl, &cr);
+    // input tree:
+    //     5
+    //  1     4
+    //      3   6
+
+    cout << Solution::isValidBST(&root); // expected 0
+    */
+    /*********************************************************/
+
     // Test for 102
     /*
     TreeNode gl = TreeNode(15);
@@ -452,6 +505,20 @@ int main() {
         cout << reversed.val << " ,";
         reversed = *reversed.next;
     }
+    */
+    /*********************************************************/
+
+    // Test for 235
+    /*
+    TreeNode cl = TreeNode(2);
+    TreeNode cr = TreeNode(8);
+    TreeNode root = TreeNode(6, &cl, &cr);
+    // input tree:
+    //      6
+    //    2   8
+
+    TreeNode lowestCommon = *Solution::lowestCommonAncestor(&root, &cl, &cr);
+    cout << lowestCommon.val;
     */
     /*********************************************************/
 
