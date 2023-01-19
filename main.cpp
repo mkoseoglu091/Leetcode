@@ -49,6 +49,9 @@ struct TreeNode {
 
 class Solution {
    public:
+    // leetcode provided palceholders
+    static bool isBadVersion(int n) { return n >= 5; }  // used in 278
+
     /**
      * 21. Merge Two Sorted Lists
      * Given two sorted linked lists, returns a single merged linked list
@@ -187,6 +190,26 @@ class Solution {
     }
 
     /**
+     * 278. First Bad Version
+     * The function isBadVersion is provided, which returns if the version is
+     * bad or not given the version in integer. This function finds the first
+     * bad version, for example if the versions after V3 are bad, the function should
+     * return 3.
+     * The placeholder isBadVersion assumes first bad is always 5th version for simplicity
+     */
+    static int firstBadVersion(int n) {
+        int st = 1, end = n;
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+            if (isBadVersion(mid) == false) {
+                st = mid + 1;
+            } else
+                end = mid - 1;
+        }
+        return st;
+    }
+
+    /**
      * 392. Is Subsequence
      * Given strings s and t, determine if s is a subsequence of t
      * relative order must be same. example: abc is a subsequence of ahbgdc
@@ -259,6 +282,27 @@ class Solution {
         vector<int> ans;
         solve(root, ans);
         return ans;
+    }
+
+    /**
+     * 704. Binary Search
+     * Given a vector of integers sorted in ascending order, returns the index of target
+     * If target is not found returns -1
+     */
+    static int search(vector<int> &nums, int target) {
+        int end = nums.size() - 1;
+        int start = 0;
+        while (start <= end) {
+            int mid = start + ((end - start) / 2);
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] > target) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -345,7 +389,7 @@ int main() {
     /*********************************************************/
 
     // Test for 102
-
+    /*
     TreeNode gl = TreeNode(15);
     TreeNode gr = TreeNode(7);
     TreeNode cl = TreeNode(9);
@@ -366,7 +410,7 @@ int main() {
         cout << "]";
     }
     cout << "]" << endl;
-
+    */
     /*********************************************************/
 
     // Test for 121
@@ -411,6 +455,12 @@ int main() {
     */
     /*********************************************************/
 
+    // Test for 278
+    /*
+    cout << Solution::firstBadVersion(10);
+    */
+    /*********************************************************/
+
     // Test for 392
     /*
     string s = "abc";
@@ -446,6 +496,13 @@ int main() {
         cout << i << ", ";
     }
     cout << endl;
+    */
+    /*********************************************************/
+
+    // Test for 704
+    /*
+    vector<int> v{-1, 0, 3, 5, 9, 12};
+    cout << Solution::search(v, 9);
     */
     /*********************************************************/
 
