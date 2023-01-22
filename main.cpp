@@ -158,6 +158,46 @@ class Solution {
     }
 
     /**
+     * 200. Number of Islands
+     * Given m x n 2d grid of characters made up of '1' and '0', where
+     * 1 represents land, and 0 represents water, return the number of islands
+     * where an island is 4-directionally connected positions of 1s.
+     */
+    static int numIslands(vector<vector<char>> &grid) {
+        int r = grid.size();
+        int c = grid[0].size();
+        int islands = 0;
+        for (int i{0}; i < r; ++i) {
+            for (int j{0}; j < c; ++j) {
+                if (grid[i][j] == '1') {
+                    islands++;
+                    DFS(grid, i, j);
+                }
+            }
+        }
+        return islands;
+    }
+
+    // helper function to do flood fill
+    static void DFS(vector<vector<char>> &grid, int i, int j) {
+        // boundary checking
+        if (i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size())
+            return;
+        // return if current position is of water or is already visited
+        if (grid[i][j] == '2' || grid[i][j] == '0')
+            return;
+
+        // mark the current as visited
+        grid[i][j] = '2';
+
+        // do DFS in all 4 directions
+        DFS(grid, i + 1, j);
+        DFS(grid, i, j - 1);
+        DFS(grid, i - 1, j);
+        DFS(grid, i, j + 1);
+    }
+
+    /**
      * 205. Isomorphic Strings
      * Given strings s and t, determine if they are isomorphic
      * example: egg -> add. letters can be replaced to get the second string
@@ -378,6 +418,36 @@ class Solution {
     }
 
     /**
+     * 733. Flood Fill
+     * Given an image represented as a m x n grid of vector<vector<int>> type,
+     * provided a coordinate (sr,sc) and a color, perform flood fill so the seleted
+     * coordinate and all coordinates 4-directionally connected recursively are painted to
+     * the given color (int)
+     */
+    static vector<vector<int>> floodFill(vector<vector<int>> &image, int sr, int sc, int color) {
+        int curColor = image[sr][sc];
+        if (curColor == color) {
+            return image;
+        }
+
+        image[sr][sc] = color;
+
+        if (sr + 1 < image.size() && image[sr + 1][sc] == curColor) {
+            floodFill(image, sr + 1, sc, color);
+        }
+        if (sr - 1 >= 0 && image[sr - 1][sc] == curColor) {
+            floodFill(image, sr - 1, sc, color);
+        }
+        if (sc + 1 < image[0].size() && image[sr][sc + 1] == curColor) {
+            floodFill(image, sr, sc + 1, color);
+        }
+        if (sc - 1 >= 0 && image[sr][sc - 1] == curColor) {
+            floodFill(image, sr, sc - 1, color);
+        }
+        return image;
+    }
+
+    /**
      * 876. Middle of Linked List
      * Given head of singly linked list returns the middle Node
      */
@@ -487,6 +557,13 @@ int main() {
     */
     /*********************************************************/
 
+    // Test for 200
+    /*
+    vector<vector<char>> grid = {{'1', '1', '0', '0', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '1', '0', '0'}, {'0', '0', '0', '1', '1'}};
+    cout << Solution::numIslands(grid);
+    */
+    /*********************************************************/
+
     // Test for 205
     /*
     string s = "paper";
@@ -578,6 +655,26 @@ int main() {
     vector<int> v{1, 7, 3, 6, 5, 6};
     int pivot = Solution::pivotIndex(v);
     cout << pivot << endl;
+    */
+    /*********************************************************/
+
+    // Test for 733
+    /*
+    vector<vector<int>> image = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
+    for (auto v : image) {
+        for (auto i : v) {
+            cout << i << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+    image = Solution::floodFill(image, 1, 1, 2);
+    for (auto v : image) {
+        for (auto i : v) {
+            cout << i << " ";
+        }
+        cout << endl;
+    }
     */
     /*********************************************************/
 
