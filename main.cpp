@@ -76,6 +76,21 @@ class Solution {
     }
 
     /**
+     * 70. Climbing Stairs
+     * If a person can climb the stairs 1 or 2 steps at a time, how many different
+     * ways can they climb to the top of a stair with n steps. This boils down to
+     * the fibonacci sequence. For speed, this algorithm calculates up to n steps
+     * in a vector, and returns the nth step instead of solving it recursively
+     */
+    static int climbStairs(int n) {
+        vector<int> stairs{1, 1};
+        for (int i{2}; i < n + 1; i++) {
+            stairs.push_back(stairs[i - 1] + stairs[i - 2]);
+        }
+        return stairs[n];
+    }
+
+    /**
      * 98. Validate Binary Search Tree
      * Given the root of a binary tree determine if its a valid binary search tree
      */
@@ -345,6 +360,20 @@ class Solution {
     }
 
     /**
+     * 509. Fibonacci Number
+     * Given integer n, return the nth value of the fibonacci sequence
+     */
+    static int fib(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        if (n == 1) {
+            return 1;
+        }
+        return fib(n - 1) + fib(n - 2);
+    }
+
+    /**
      * 589. N-ary Tree Preorder Traversal
      * Given the root node of an n-ary tree, return preorder traversal of nodes
      */
@@ -495,6 +524,12 @@ int main() {
     */
     /*********************************************************/
 
+    // Test for 70
+    /*
+    cout << Solution::climbStairs(5);
+    */
+    /*********************************************************/
+
     // Test for 98
     /*
     TreeNode gl = TreeNode(3);
@@ -617,6 +652,12 @@ int main() {
     /*
     string s = "abccccdd";
     cout << Solution::longestPalindrome(s);
+    */
+    /*********************************************************/
+
+    // Test for 509
+    /*
+    cout << Solution::fib(8);
     */
     /*********************************************************/
 
